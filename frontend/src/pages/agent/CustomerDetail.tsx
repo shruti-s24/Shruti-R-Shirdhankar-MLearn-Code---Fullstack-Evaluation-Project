@@ -77,7 +77,11 @@ export default function CustomerDetail() {
     } catch (err: any) {
       const field = err?.response?.data?.field as keyof Customer | undefined;
       const message = err?.response?.data?.message || "Couldn't save changes.";
-      if (field && field !== "server" && field !== "agentId") {
+      if (
+        field &&
+        (field as string) !== "server" &&
+        (field as string) !== "agentId"
+      ) {
         setFieldError(field, { message });
       } else {
         alert(message);

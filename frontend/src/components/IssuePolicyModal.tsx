@@ -54,9 +54,9 @@ export default function IssuePolicyModal({
       const message = err?.response?.data?.message || "Couldn't issue policy.";
       if (
         field &&
-        field !== "server" &&
-        field !== "agent" &&
-        field !== "customerId"
+        (field as string) !== "server" &&
+        (field as string) !== "agent" &&
+        (field as string) !== "customerId"
       ) {
         setError(field, { message });
       } else {

@@ -36,7 +36,7 @@ export default function CustomerCreate() {
         | keyof CustomerFormValues
         | undefined;
       const message = err?.response?.data?.message || "Something went wrong.";
-      if (field && field !== "server") {
+      if (field && (field as string) !== "server") {
         setError(field, { message });
       } else {
         alert(message);
