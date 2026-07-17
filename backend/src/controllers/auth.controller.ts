@@ -77,8 +77,8 @@ export const login = async (req: Request, res: Response) => {
 
     res.cookie(SESSION_COOKIE_NAME, token, {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', 
       maxAge: SESSION_TTL_MS,
     });
 
@@ -102,9 +102,9 @@ export const login = async (req: Request, res: Response) => {
 export const logout = (_req: Request, res: Response) => {
   res.clearCookie(SESSION_COOKIE_NAME, {
     httpOnly: true,
-    secure: true,
-    sameSite: "none",
-  });
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+});
 
   return res.status(200).json({
     success: true,
