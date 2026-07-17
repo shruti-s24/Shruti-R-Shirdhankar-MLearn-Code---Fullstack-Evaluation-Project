@@ -78,7 +78,7 @@ export const login = async (req: Request, res: Response) => {
     res.cookie(SESSION_COOKIE_NAME, token, {
       httpOnly: true,
       secure: true,
-      sameSite: "strict",
+      sameSite: "none",
       maxAge: SESSION_TTL_MS,
     });
 
@@ -103,7 +103,7 @@ export const logout = (_req: Request, res: Response) => {
   res.clearCookie(SESSION_COOKIE_NAME, {
     httpOnly: true,
     secure: true,
-    sameSite: "strict",
+    sameSite: "none",
   });
 
   return res.status(200).json({
