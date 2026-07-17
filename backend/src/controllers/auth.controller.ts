@@ -3,6 +3,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { Agent } from "../models/agent.model";
 import { Admin } from "../models/admin.model";
+import dotenv from "dotenv";
+dotenv.config();
 
 const SESSION_COOKIE_NAME = "session";
 const expireMins = Number(process.env.COOKIE_EXPIRY_MINS);
@@ -61,6 +63,7 @@ export const login = async (req: Request, res: Response) => {
         message: "Account is inactive.",
       });
     }
+
     const passwordMatches = await bcrypt.compare(password, user.passwordHash);
 
     if (!passwordMatches) {
@@ -88,6 +91,7 @@ export const login = async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
+    console.error("Login error:", error);
     return res.status(500).json({
       success: false,
       message: "Login failed.",
@@ -105,5 +109,15 @@ export const logout = (_req: Request, res: Response) => {
   return res.status(200).json({
     success: true,
     message: "Logged out successfully.",
+  });
+};
+
+export const getMe = async (req: Request, res: Response) => {
+  return res.status(200).json({
+    success: true,
+    user: {
+      id: req.user?.id,
+      role: req.user?.role,
+    },
   });
 };

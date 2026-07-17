@@ -90,7 +90,7 @@ export function validateNominee(
   }
 
   if (
-    policyholderName.trim().toLowerCase() === nomineeName.trim().toLowerCase()
+    policyholderName.toLowerCase().trim() === nomineeName.toLowerCase().trim()
   ) {
     return invalid(
       "nomineeName",
@@ -222,6 +222,65 @@ export function validateAgentIdIsImmutable(
       "agentId",
       "agentId cannot be changed after policy issuance."
     );
+  }
+
+  return { valid: true };
+}
+
+export function validateAgentInput(data:{
+    name: string;
+    email: string; 
+    password: string;
+}): ValidationResult {
+    if (!data.name || !data.name.trim()) {
+        return invalid("name", "Agent name is required.");
+    }
+    if(!data.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) {
+        return invalid("email", "A valid email is required.");
+    }
+    if(!data.password || data.password.length < 8) {
+        return invalid("password", "Password must be at least 8 characters long.");
+    }
+    return { valid: true };
+}
+
+export function validateCustomerInput(data: {
+  name?: string;
+  dob?: string | Date;
+  mobile?: string;
+  email?: string;
+  pan?: string;
+  aadhaar?: string;
+  nomineeName?: string;
+  nomineeRelation?: string;
+  createdAt?: string | Date;
+}): ValidationResult {
+  if (!data.name || !data.name.trim()) {
+    return invalid("name", "Customer name is required.");
+  }
+
+  if (!data.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) {
+    return invalid("email", "A valid email is required.");
+  }
+
+  const dobCheck = validateCustomerAge(data.dob || "", new Date());
+  if (!dobCheck.valid) {
+    return dobCheck;
+  }
+
+  const mobileCheck = validateMobile(data.mobile || "");
+  if (!mobileCheck.valid) {
+    return mobileCheck;
+  }
+
+  const aadhaarCheck = validateAadhaar(data.aadhaar || "");
+  if (!aadhaarCheck.valid) {
+    return aadhaarCheck;
+  }
+
+  const nomineeCheck = validateNominee(data.name || "", data.nomineeName || "");
+  if (!nomineeCheck.valid) {
+    return nomineeCheck;
   }
 
   return { valid: true };

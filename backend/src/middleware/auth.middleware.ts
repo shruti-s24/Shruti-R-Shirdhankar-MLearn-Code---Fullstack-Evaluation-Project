@@ -1,11 +1,14 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import { SessionUser } from "../types/express";
+import dotenv from "dotenv";
+dotenv.config();
 
 const secret = process.env.COOKIE_SECRET;
 
 interface SessionPayload {
   id: string;
-  role: ("admin" | "agent")[];
+  role: "admin" | "agent";
 }
 
 export const requireAuth = (roles: string[]) => {
@@ -28,7 +31,7 @@ export const requireAuth = (roles: string[]) => {
         });
       }
 
-      const decoded = jwt.verify(token, secret) as SessionPayload;
+        const decoded = jwt.verify(token, secret) as SessionUser;
 
       if (!decoded?.id || !decoded?.role) {
         return res.status(401).json({

@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+  --color-maroon: #6E0F17;
+  --color-red: #C41E2A;
+  --color-white: #FFFFFF;
+  --color-navy: #0B2E44;
+  --color-sky: #6E9FC1;
+
+  --font-serif: "Lora", serif;
+  --font-sans: "Inter", sans-serif;
+}
+
+body {
+  font-family: var(--font-sans);
+}
